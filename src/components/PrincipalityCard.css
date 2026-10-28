@@ -1,0 +1,80 @@
+.principalityCard {
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radius-principality);
+    background: var(--surface);
+    cursor: pointer;
+}
+
+.principalityCard__media {
+    position: relative;
+}
+
+.principalityCard__poster {
+    height: 104px;
+    background: var(--surface-muted);
+    object-fit: cover;
+    transition: opacity .15s;
+}
+
+.principalityCard:hover .principalityCard__poster {
+    opacity: .8;
+}
+
+.principalityCard:active {
+    transform: scale(.985);
+}
+
+.principalityCard__likes {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .55);
+    color: #FFFFFF;
+    font-size: 11px;
+}
+
+.principalityCard__likesGlyph {
+    width: 12px;
+    height: 12px;
+    fill: #FFFFFF;
+}
+
+.principalityCard .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 11px 12px 12px;
+}
+
+.principalityCard .card-title {
+    margin: 0;
+    font-size: 15px;
+    line-height: 19px;
+    font-weight: 600;
+}
+
+.principalityCard__founding {
+    margin: auto 0 0;
+    padding-top: 7px;
+    color: var(--area);
+    font-size: 19px;
+    line-height: 23px;
+    font-weight: 700;
+}
+
+.principalityCard__landCoefficient {
+    align-self: flex-start;
+    margin-top: 7px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--surface-muted);
+    color: var(--foreground-muted);
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+}

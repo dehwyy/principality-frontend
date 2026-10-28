@@ -1,0 +1,24 @@
+:root {
+  --bg: #E8E8E1;
+  --surface: #FFFFFF;
+  --surface-muted: #F0F0E9;
+  --control: #E8E8E1;
+  --foreground: #1A1A1A;
+  --foreground-muted: #4C4C4C;
+  --primary: #FEE500;
+  --on-primary: #1A1A1A;
+  --bar-bg: #000000;
+  --area: #1A1A1A;
+  --like: #1A1A1A;
+  --border: rgba(26, 26, 26, .14);
+  --hover-underline: #262626;
+
+  --feed-bg: #1A1A1A;
+  --feed-foreground: #FFFFFF;
+  --feed-area: #FEE500;
+  --feed-like: #FFFFFF;
+
+  --tab-bar-height: 64px;
+  --page-width: 390px;
+  --radius-principality: 20px;
+}

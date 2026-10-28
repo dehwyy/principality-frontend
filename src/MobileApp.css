@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    background: var(--bg);
+}
+
+.appShell {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.12);
+}
+
+.appContent {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: var(--tab-bar-height);
+}
