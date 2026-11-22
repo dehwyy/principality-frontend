@@ -1,10 +1,11 @@
 import "./PrincipalityFeedPage.css";
-import { FC, useState } from "react";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { PRINCIPALITIES_MOCK } from "../modules/mock";
 import { ROUTES } from "../Routes";
-import { AppOutletContext } from "../AppLayout";
+import { BlockingSpinner } from "../components/BlockingSpinner";
+import { useAppDispatch, useAppSelector } from "../store";
+import { fetchFeedPrincipality, likePrincipality } from "../slices/principalitiesSlice";
 
 const defaultImage = "/DefaultImage.jpg";
 const defaultVideo = "/DefaultVideo.mp4";
@@ -12,33 +13,55 @@ const defaultVideo = "/DefaultVideo.mp4";
 export const PrincipalityFeedPage: FC = () => {
   const [summaryExpanded, setSummaryExpanded] = useState(false);
   const { id } = useParams();
+  const principalityId = Number(id);
   const navigate = useNavigate();
-  const { principalities } = useOutletContext<AppOutletContext>();
+  const dispatch = useAppDispatch();
+  const { feedPrincipality, loading, error } = useAppSelector((state) => state.principalities);
+  const isAuthenticated = useAppSelector((state) => state.archaeologist.isAuthenticated);
 
   const principality =
-    principalities.find((entry) => String(entry.principality_id) === id) ??
-    PRINCIPALITIES_MOCK.find((entry) => String(entry.principality_id) === id);
+    feedPrincipality?.principality_id === principalityId ? feedPrincipality : null;
 
-  const handleNext = () => {
-    if (!id || !principalities.length) return;
-    const currentIndex = principalities.findIndex(
-      (entry) => String(entry.principality_id) === id
+  useEffect(() => {
+    if (principalityId && !principality && !loading) {
+      dispatch(fetchFeedPrincipality({ principalityId }));
+    }
+  }, [dispatch, principalityId, principality, loading]);
+
+  const handleNext = async () => {
+    const nextPrincipality = await dispatch(
+      fetchFeedPrincipality({ principalityId, next: true })
+    )
+      .unwrap()
+      .catch(() => null);
+    if (nextPrincipality) {
+      setSummaryExpanded(false);
+      navigate(`${ROUTES.FEED}/${nextPrincipality.principality_id}`);
+    }
+  };
+
+  const handleLike = () => {
+    if (!principality) return;
+    dispatch(
+      likePrincipality({
+        principalityId,
+        principality_liked: principality.principality_liked ? 0 : 1,
+      })
     );
-    const nextPrincipality = principalities[currentIndex + 1] ?? principalities[0];
-    setSummaryExpanded(false);
-    navigate(`${ROUTES.FEED}/${nextPrincipality.principality_id}`);
   };
 
   if (!principality) {
     return (
       <div className="feedPage">
-        <h1 className="feedMissing">Княжество не найдено</h1>
+        {loading && <BlockingSpinner />}
+        {!loading && <h1 className="feedMissing">{error ?? "Княжество не найдено"}</h1>}
       </div>
     );
   }
 
   return (
     <div className="feedPage">
+      {loading && <BlockingSpinner />}
       <video
         className="feedVideo"
         src={principality.principality_video_url || defaultVideo}
@@ -58,13 +81,19 @@ export const PrincipalityFeedPage: FC = () => {
           <span className="feedFieldValue">{principality.land_coefficient}</span>
           <span className="feedFieldCaption">коэф. земли</span>
         </span>
-        <span className="feedLikes">
+        <button
+          type="button"
+          className={`feedLikes ${principality.principality_liked ? "feedLikesActive" : ""}`}
+          disabled={!isAuthenticated || loading}
+          aria-label="Лайк княжества"
+          onClick={handleLike}
+        >
           <svg className="feedLikesGlyph" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 21s-8-5.1-8-10.2A4.8 4.8 0 0 1 12 7.6 4.8 4.8 0 0 1 20 10.8C20 15.9 12 21 12 21z" />
           </svg>
           {principality.principality_like_count}
-        </span>
-        <Button className="feedNextBtn" onClick={handleNext}>
+        </button>
+        <Button className="feedNextBtn" disabled={loading} onClick={handleNext}>
           Далее
         </Button>
       </div>

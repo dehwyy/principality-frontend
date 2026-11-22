@@ -1,42 +1,39 @@
 import "./PrincipalitiesPage.css";
-import { FC, useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { FC, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FoundingDateField } from "../components/FoundingDateField";
 import { ROUTES } from "../Routes";
 import { PrincipalityCard } from "../components/PrincipalityCard";
-import { AppOutletContext } from "../AppLayout";
-import { PRINCIPALITIES_MOCK } from "../modules/mock";
+import { BlockingSpinner } from "../components/BlockingSpinner";
+import { useAppDispatch, useAppSelector } from "../store";
+import {
+  deletePrincipality,
+  fetchPrincipalities,
+  setFoundedBefore,
+} from "../slices/principalitiesSlice";
 
 const PrincipalitiesPage: FC = () => {
-  const [foundedBefore, setFoundedBefore] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [catalogPrincipalities, setCatalogPrincipalities] = useState(PRINCIPALITIES_MOCK);
-  const { setPrincipalities } = useOutletContext<AppOutletContext>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { foundedBefore, principalities, loading, fromMock, error } = useAppSelector(
+    (state) => state.principalities
+  );
+  const isAuthenticated = useAppSelector((state) => state.archaeologist.isAuthenticated);
 
   useEffect(() => {
-    setPrincipalities(PRINCIPALITIES_MOCK);
-  }, [setPrincipalities]);
-
-  const applyMock = () => {
-    const results = foundedBefore
-      ? PRINCIPALITIES_MOCK.filter(
-          (principality) => principality.founding_date.slice(0, 10) <= foundedBefore
-        )
-      : PRINCIPALITIES_MOCK;
-    setCatalogPrincipalities(results);
-    setPrincipalities(results);
-    setLoading(false);
-  };
+    dispatch(fetchPrincipalities());
+  }, [dispatch]);
 
   const handleFoundedBeforeSubmit = () => {
-    setLoading(true);
-    applyMock();
+    dispatch(fetchPrincipalities());
   };
 
   const handleCardClick = (principality_id: number) => {
     navigate(`${ROUTES.FEED}/${principality_id}`);
+  };
+
+  const handleDelete = (principality_id: number) => {
+    dispatch(deletePrincipality(principality_id));
   };
 
   return (
@@ -44,32 +41,39 @@ const PrincipalitiesPage: FC = () => {
       <h1 className="containerTitle">Удельные княжества</h1>
       <FoundingDateField
         value={foundedBefore}
-        setValue={(value) => setFoundedBefore(value)}
+        setValue={(value) => dispatch(setFoundedBefore(value))}
         loading={loading}
         onSubmit={handleFoundedBeforeSubmit}
       />
 
-      {loading && (
-        <div className="loadingBg">
-          <Spinner animation="border" />
+      {fromMock && (
+        <div className="principalitiesNotice">
+          Веб-сервис недоступен, показаны княжества из локальной коллекции
         </div>
       )}
-      {!loading &&
-        (!catalogPrincipalities.length ? (
-          <div className="principalitiesEmpty">
-            К сожалению, пока ничего не найдено :(
-          </div>
-        ) : (
-          <div className="principalitiesGrid">
-            {catalogPrincipalities.map((principality) => (
-              <PrincipalityCard
-                key={principality.principality_id}
-                onClick={() => handleCardClick(principality.principality_id)}
-                {...principality}
-              />
-            ))}
-          </div>
-        ))}
+      {error && <div className="principalitiesNotice principalitiesNoticeError">{error}</div>}
+
+      {loading && <BlockingSpinner />}
+      {!principalities.length && !loading ? (
+        <div className="principalitiesEmpty">
+          К сожалению, пока ничего не найдено :(
+        </div>
+      ) : (
+        <div className="principalitiesGrid">
+          {principalities.map((principality) => (
+            <PrincipalityCard
+              key={principality.principality_id}
+              onClick={() => handleCardClick(principality.principality_id)}
+              onDelete={
+                isAuthenticated && principality.created_by_current_archaeologist
+                  ? () => handleDelete(principality.principality_id)
+                  : undefined
+              }
+              {...principality}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

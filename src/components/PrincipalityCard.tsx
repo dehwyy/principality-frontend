@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, MouseEvent } from "react";
 import { Card } from "react-bootstrap";
 import "./PrincipalityCard.css";
 
@@ -11,6 +11,7 @@ interface ICardProps {
   land_coefficient: number;
   principality_like_count: number;
   onClick: () => void;
+  onDelete?: () => void;
 }
 
 export const PrincipalityCard: FC<ICardProps> = ({
@@ -20,7 +21,13 @@ export const PrincipalityCard: FC<ICardProps> = ({
   land_coefficient,
   principality_like_count,
   onClick,
+  onDelete,
 }) => {
+  const handleDelete = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onDelete?.();
+  };
+
   return (
     <Card className="principalityCard" onClick={onClick}>
       <div className="principalityCard__media">
@@ -35,6 +42,18 @@ export const PrincipalityCard: FC<ICardProps> = ({
           </svg>
           {principality_like_count}
         </span>
+        {onDelete && (
+          <button
+            type="button"
+            className="principalityCard__delete"
+            aria-label="Удалить княжество"
+            onClick={handleDelete}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 7h12l-1 13H7L6 7zm3-3h6l1 2H8l1-2zM4 6h16v1.5H4z" />
+            </svg>
+          </button>
+        )}
       </div>
       <Card.Body>
         <Card.Title>{principality_name}</Card.Title>

@@ -11,14 +11,17 @@
     font-weight: 700;
 }
 
-.loadingBg {
-    z-index: 999;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.principalitiesNotice {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--surface-muted);
+    color: var(--foreground-muted);
+    font-size: 13px;
+}
+
+.principalitiesNoticeError {
+    background: rgba(220, 53, 69, .12);
+    color: #a52834;
 }
 
 .principalitiesGrid {

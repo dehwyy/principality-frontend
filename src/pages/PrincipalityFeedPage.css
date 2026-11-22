@@ -65,8 +65,22 @@
     flex-direction: column;
     align-items: center;
     gap: 5px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
     font-size: 13px;
     font-weight: 600;
+    cursor: pointer;
+}
+
+.feedLikes:disabled {
+    cursor: default;
+}
+
+.feedLikesActive .feedLikesGlyph {
+    fill: var(--feed-area);
 }
 
 .feedLikesGlyph {

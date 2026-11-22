@@ -78,3 +78,25 @@
     font-weight: 500;
     white-space: nowrap;
 }
+
+.principalityCard__delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(26, 26, 26, .72);
+    cursor: pointer;
+}
+
+.principalityCard__delete > svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--primary);
+}
