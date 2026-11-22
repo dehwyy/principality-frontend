@@ -13,6 +13,7 @@ import {
 import { deletePrincipality } from "../slices/principalitiesSlice";
 
 const defaultImage = "/DefaultImage.jpg";
+const defaultVideo = "/DefaultVideo.mp4";
 
 export const PrincipalityDraftPage: FC = () => {
   const [principalityName, setPrincipalityName] = useState("");
@@ -30,11 +31,22 @@ export const PrincipalityDraftPage: FC = () => {
     [principalityImage]
   );
 
+  const videoPreview = useMemo(
+    () => (principalityVideo ? URL.createObjectURL(principalityVideo) : null),
+    [principalityVideo]
+  );
+
   useEffect(() => {
     return () => {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [imagePreview]);
+
+  useEffect(() => {
+    return () => {
+      if (videoPreview) URL.revokeObjectURL(videoPreview);
+    };
+  }, [videoPreview]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -89,11 +101,22 @@ export const PrincipalityDraftPage: FC = () => {
       {draft ? (
         <>
           <div className="principalityDraft__card">
-            <img
-              className="principalityDraft__poster"
-              src={draft.principality_image_url || defaultImage}
-              alt={draft.principality_name}
-            />
+            <div className="principalityDraft__media">
+              <img
+                className="principalityDraft__preview"
+                src={draft.principality_image_url || defaultImage}
+                alt={draft.principality_name}
+              />
+              <video
+                className="principalityDraft__preview"
+                key={draft.principality_video_url || defaultVideo}
+                src={draft.principality_video_url || defaultVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            </div>
             <div className="principalityDraft__cardBody">
               <span className="principalityDraft__status">черновик</span>
               <h2 className="principalityDraft__name">{draft.principality_name}</h2>
@@ -149,17 +172,47 @@ export const PrincipalityDraftPage: FC = () => {
         </>
       ) : (
         <>
-          <div className="principalityDraft__card">
-            <img
-              className="principalityDraft__poster"
-              src={imagePreview ?? defaultImage}
-              alt={principalityName || "Новое княжество"}
-            />
-            <div className="principalityDraft__cardBody">
-              <h2 className="principalityDraft__name">{principalityName || "Новое княжество"}</h2>
-            </div>
-          </div>
           <Form className="principalityDraft__form" onSubmit={handleCreate}>
+            <div className="principalityDraft__media">
+              <Form.Group controlId="principality_image" className="principalityDraft__mediaItem">
+                <Form.Label>Изображение</Form.Label>
+                <img
+                  className="principalityDraft__preview"
+                  src={imagePreview ?? defaultImage}
+                  alt={principalityName || "Новое княжество"}
+                />
+                <Form.Control
+                  type="file"
+                  size="sm"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  required
+                  onChange={(event) =>
+                    setPrincipalityImage((event.target as HTMLInputElement).files?.[0] ?? null)
+                  }
+                />
+              </Form.Group>
+              <Form.Group controlId="principality_video" className="principalityDraft__mediaItem">
+                <Form.Label>Видео</Form.Label>
+                <video
+                  className="principalityDraft__preview"
+                  key={videoPreview ?? defaultVideo}
+                  src={videoPreview ?? defaultVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+                <Form.Control
+                  type="file"
+                  size="sm"
+                  accept="video/mp4,video/webm,video/quicktime"
+                  required
+                  onChange={(event) =>
+                    setPrincipalityVideo((event.target as HTMLInputElement).files?.[0] ?? null)
+                  }
+                />
+              </Form.Group>
+            </div>
             <Form.Group controlId="principality_name">
               <Form.Label>Название княжества</Form.Label>
               <Form.Control
@@ -167,28 +220,6 @@ export const PrincipalityDraftPage: FC = () => {
                 required
                 maxLength={100}
                 onChange={(event) => setPrincipalityName(event.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="principality_image">
-              <Form.Label>Изображение</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/jpeg,image/png,image/gif,image/webp"
-                required
-                onChange={(event) =>
-                  setPrincipalityImage((event.target as HTMLInputElement).files?.[0] ?? null)
-                }
-              />
-            </Form.Group>
-            <Form.Group controlId="principality_video">
-              <Form.Label>Видео</Form.Label>
-              <Form.Control
-                type="file"
-                accept="video/mp4,video/webm,video/quicktime"
-                required
-                onChange={(event) =>
-                  setPrincipalityVideo((event.target as HTMLInputElement).files?.[0] ?? null)
-                }
               />
             </Form.Group>
             <Button type="submit" className="principalityDraft__publish" disabled={loading}>

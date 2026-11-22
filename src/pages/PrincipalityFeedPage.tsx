@@ -66,6 +66,11 @@ export const PrincipalityFeedPage: FC = () => {
         className="feedVideo"
         src={principality.principality_video_url || defaultVideo}
         poster={principality.principality_image_url || defaultImage}
+        onError={(event) => {
+          event.currentTarget.onerror = null;
+          event.currentTarget.poster = defaultImage;
+          event.currentTarget.src = defaultVideo;
+        }}
         autoPlay
         loop
         muted

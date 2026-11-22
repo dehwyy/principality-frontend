@@ -23,11 +23,33 @@
     background: var(--surface-muted);
 }
 
-.principalityDraft__poster {
+.principalityDraft__media {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.principalityDraft__card .principalityDraft__media {
+    gap: 2px;
+}
+
+.principalityDraft__mediaItem {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.principalityDraft__preview {
     display: block;
     width: 100%;
     height: 160px;
     object-fit: cover;
+    background: var(--feed-bg);
+}
+
+.principalityDraft__mediaItem .principalityDraft__preview {
+    border-radius: 12px;
 }
 
 .principalityDraft__cardBody {

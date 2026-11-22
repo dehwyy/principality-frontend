@@ -35,6 +35,10 @@ export const PrincipalityCard: FC<ICardProps> = ({
           className="principalityCard__poster"
           variant="top"
           src={principality_image_url || defaultImage}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = defaultImage;
+          }}
         />
         <span className="principalityCard__likes">
           <svg className="principalityCard__likesGlyph" viewBox="0 0 24 24" aria-hidden="true">
