@@ -10,7 +10,7 @@ React 19 + TypeScript + Vite, React-Bootstrap, react-router-dom, Redux Toolkit (
 npm install
 npm run generate-api   # src/api/Api.ts из ../principality-backend/docs/swagger.json
 npx mkcert create-ca
-npx mkcert create-cert --domains localhost,127.0.0.1,<IP ноутбука>
+npx mkcert create-cert --domains localhost 127.0.0.1 <IP ноутбука>
 npm run dev
 ```
 
