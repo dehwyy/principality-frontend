@@ -1,5 +1,11 @@
+.appContent:has(.feedPage) {
+    background: var(--feed-bg);
+}
+
 .feedPage {
     position: relative;
+    max-width: 420px;
+    margin: 0 auto;
     height: calc(100vh - var(--tab-bar-height));
     overflow: hidden;
     background: var(--feed-bg);
@@ -145,4 +151,10 @@
 .feedMissing {
     padding: 40px 20px;
     text-align: center;
+}
+
+@media (max-width: 768px) {
+    .feedPage {
+        max-width: none;
+    }
 }

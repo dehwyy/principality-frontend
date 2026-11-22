@@ -8,7 +8,7 @@ import { AppLayout } from "./AppLayout";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/principality-frontend">
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Navigate to={ROUTES.PRINCIPALITIES} replace />} />

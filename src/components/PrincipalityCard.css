@@ -11,7 +11,7 @@
 }
 
 .principalityCard__poster {
-    height: 104px;
+    height: 180px;
     background: var(--surface-muted);
     object-fit: cover;
     transition: opacity .15s;
@@ -99,4 +99,16 @@
     width: 16px;
     height: 16px;
     fill: var(--primary);
+}
+
+@media (max-width: 1200px) {
+    .principalityCard__poster {
+        height: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .principalityCard__poster {
+        height: 104px;
+    }
 }

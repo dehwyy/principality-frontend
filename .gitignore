@@ -24,3 +24,9 @@ CLAUDE.md
 .plans/
 .specs/
 .vscode/
+ca.key
+cert.key
+dev-dist
+ca.crt
+cert.crt
+vite.verify.config.ts

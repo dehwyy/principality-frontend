@@ -5,6 +5,7 @@ import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App.tsx'
 import { store } from './store'
+import {registerSW} from "virtual:pwa-register";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,3 +14,7 @@ createRoot(document.getElementById('root')!).render(
     </Provider>
   </StrictMode>,
 )
+
+if ("serviceWorker" in navigator) {
+  registerSW()
+}

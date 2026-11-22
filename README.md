@@ -9,10 +9,35 @@ React 19 + TypeScript + Vite, React-Bootstrap, react-router-dom, Redux Toolkit (
 ```bash
 npm install
 npm run generate-api   # src/api/Api.ts из ../principality-backend/docs/swagger.json
+npx mkcert create-ca
+npx mkcert create-cert --domains localhost,127.0.0.1,<IP ноутбука>
 npm run dev
 ```
 
-Приложение открывается на `http://localhost:3000`, корень перенаправляет на `/principalities`. Dev-сервер Vite проксирует `/api` на веб-сервис `http://localhost:8080` и `/principality-media` на Minio `http://localhost:9000`, поэтому CORS не возникает. Если веб-сервис недоступен, гость видит княжества из локальной коллекции `src/modules/mock.ts` (картинки — `public/mock-media`); авторизованному пользователю показывается ошибка.
+Приложение открывается на `https://localhost:3000/principality-frontend/`, корень перенаправляет на `/principalities`. Dev-сервер Vite работает по HTTPS с сертификатом `cert.crt`/`cert.key` и проксирует `/api` на веб-сервис `http://localhost:8080`, а `/principality-media` на Minio `http://localhost:9000`, поэтому CORS не возникает. Приватные ключи `ca.key` и `cert.key` в репозиторий не попадают. Первый запуск `npm run dev` просит пароль: `vite-plugin-mkcert` ставит локальный центр сертификации в системное хранилище.
+
+С телефона в той же сети приложение открывается по адресу `https://<IP ноутбука>:3000/principality-frontend/` и работает с веб-сервисом ноутбука через тот же прокси.
+
+Если веб-сервис недоступен, гость видит княжества из локальной коллекции `src/modules/mock.ts` (картинки — `public/mock-media`); авторизованному пользователю показывается ошибка.
+
+## GitHub Pages и PWA
+
+Сборка с локальной коллекцией развёрнута на https://dehwyy.github.io/principality-frontend/.
+
+```bash
+npm run build
+npm run deploy         # gh-pages -d dist, ветка gh-pages
+```
+
+Приложение устанавливается как PWA: манифест и service worker создаёт `vite-plugin-pwa` (`vite.config.ts`), регистрация — `registerSW()` в `src/main.tsx`. После установки плитка открывается без сети.
+
+## Адаптивность
+
+| Ширина окна | Колонок в плитке | Высота изображения карточки | Лента | Добавление |
+|---|---|---|---|---|
+| больше 1200px | 4 | 180px | кадр 420px по центру | медиа и поля в две колонки |
+| до 1200px | 3 | 150px | кадр 420px по центру | медиа и поля в две колонки |
+| до 768px | 2 | 104px | кадр на всю ширину | одна колонка |
 
 ## Страницы
 

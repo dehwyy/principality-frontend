@@ -12,8 +12,8 @@ import {
 } from "../slices/principalityDraftSlice";
 import { deletePrincipality } from "../slices/principalitiesSlice";
 
-const defaultImage = "/DefaultImage.jpg";
-const defaultVideo = "/DefaultVideo.mp4";
+const defaultImage = `${import.meta.env.BASE_URL}/DefaultImage.jpg`;
+const defaultVideo = `${import.meta.env.BASE_URL}/DefaultVideo.mp4`;
 
 export const PrincipalityDraftPage: FC = () => {
   const [principalityName, setPrincipalityName] = useState("");
@@ -172,7 +172,10 @@ export const PrincipalityDraftPage: FC = () => {
         </>
       ) : (
         <>
-          <Form className="principalityDraft__form" onSubmit={handleCreate}>
+          <Form
+            className="principalityDraft__form principalityDraft__form_creation"
+            onSubmit={handleCreate}
+          >
             <div className="principalityDraft__media">
               <Form.Group controlId="principality_image" className="principalityDraft__mediaItem">
                 <Form.Label>Изображение</Form.Label>

@@ -7,8 +7,8 @@ import { BlockingSpinner } from "../components/BlockingSpinner";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchFeedPrincipality, likePrincipality } from "../slices/principalitiesSlice";
 
-const defaultImage = "/DefaultImage.jpg";
-const defaultVideo = "/DefaultVideo.mp4";
+const defaultImage = `${import.meta.env.BASE_URL}/DefaultImage.jpg`;
+const defaultVideo = `${import.meta.env.BASE_URL}/DefaultVideo.mp4`;
 
 export const PrincipalityFeedPage: FC = () => {
   const [summaryExpanded, setSummaryExpanded] = useState(false);
@@ -67,9 +67,10 @@ export const PrincipalityFeedPage: FC = () => {
         src={principality.principality_video_url || defaultVideo}
         poster={principality.principality_image_url || defaultImage}
         onError={(event) => {
-          event.currentTarget.onerror = null;
-          event.currentTarget.poster = defaultImage;
-          event.currentTarget.src = defaultVideo;
+          if (!event.currentTarget.src.endsWith(defaultVideo)) {
+            event.currentTarget.poster = defaultImage;
+            event.currentTarget.src = defaultVideo;
+          }
         }}
         autoPlay
         loop

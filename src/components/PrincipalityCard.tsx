@@ -2,7 +2,7 @@ import { FC, MouseEvent } from "react";
 import { Card } from "react-bootstrap";
 import "./PrincipalityCard.css";
 
-const defaultImage = "/DefaultImage.jpg";
+const defaultImage = `${import.meta.env.BASE_URL}/DefaultImage.jpg`;
 
 interface ICardProps {
   principality_image_url: string;
@@ -36,8 +36,9 @@ export const PrincipalityCard: FC<ICardProps> = ({
           variant="top"
           src={principality_image_url || defaultImage}
           onError={(event) => {
-            event.currentTarget.onerror = null;
-            event.currentTarget.src = defaultImage;
+            if (!event.currentTarget.src.endsWith(defaultImage)) {
+              event.currentTarget.src = defaultImage;
+            }
           }}
         />
         <span className="principalityCard__likes">

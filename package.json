@@ -8,12 +8,14 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "deploy": "gh-pages -d dist",
     "generate-api": "node scripts/generate-api.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.14.0",
     "axios": "^1.21.0",
     "bootstrap": "^5.3.8",
+    "gh-pages": "^6.3.0",
     "react": "^19.3.1",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.3.1",
@@ -29,6 +31,8 @@
     "oxlint": "^1.89.0",
     "swagger-typescript-api": "^13.13.0",
     "typescript": "~7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.5",
+    "vite-plugin-mkcert": "^2.1.0",
+    "vite-plugin-pwa": "^2.0.0"
   }
 }
